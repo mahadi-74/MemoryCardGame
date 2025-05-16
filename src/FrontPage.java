@@ -25,6 +25,7 @@ public class FrontPage {
         nameLabel.setFont(new Font("Arial", Font.BOLD, 18));
         nameLabel.setBounds(240, 150, 200, 30);
         nameField.setBounds(240, 190, 220, 30);
+        // mahadi ; 
 
         // Start Game button
         startButton.setFont(new Font("Arial", Font.BOLD, 16));
