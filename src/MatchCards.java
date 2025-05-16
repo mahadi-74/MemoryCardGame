@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -40,8 +39,8 @@ public class MatchCards {
     ArrayList<Card> cardSet; //create a deck of cards with cardNames and cardImageIcons
     ImageIcon cardBackImageIcon;
 
-    int boardWidth = columns * cardWidth; //5*128 = 640px
-    int boardHeight = rows * cardHeight; //4*90 = 360px
+    int boardWidth = columns * cardWidth; //5*90 = 450px
+    int boardHeight = rows * cardHeight;   //4*128 = 512px
 
     JFrame frame = new JFrame("Pokemon Match Cards");
     JLabel textLabel = new JLabel();
@@ -56,28 +55,31 @@ public class MatchCards {
     boolean gameReady = false;
     JButton card1Selected;
     JButton card2Selected;
-    
-    MatchCards() {
+
+    String playerName; // store player name
+
+    public MatchCards(String playerName) {
+        this.playerName = playerName;
+
         setupCards();
         shuffleCards();
 
-        // frame.setVisible(true);
         frame.setLayout(new BorderLayout());
         frame.setSize(boardWidth, boardHeight);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //error text
+        // error text with player name
         textLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         textLabel.setHorizontalAlignment(JLabel.CENTER);
-        textLabel.setText("Errors: " + Integer.toString(errorCount));
+        updateStatusLabel();
 
         textPanel.setPreferredSize(new Dimension(boardWidth, 30));
         textPanel.add(textLabel);
         frame.add(textPanel, BorderLayout.NORTH);
 
-        //card game board
+        // card game board
         board = new ArrayList<JButton>();
         boardPanel.setLayout(new GridLayout(rows, columns));
         for (int i = 0; i < cardSet.size(); i++) {
@@ -106,7 +108,7 @@ public class MatchCards {
 
                             if (card1Selected.getIcon() != card2Selected.getIcon()) {
                                 errorCount += 1;
-                                textLabel.setText("Errors: " + Integer.toString(errorCount));
+                                updateStatusLabel();
                                 hideCardTimer.start();
                             }
                             else {
@@ -122,7 +124,7 @@ public class MatchCards {
         }
         frame.add(boardPanel);
 
-        //restart game button
+        // restart game button
         restartButton.setFont(new Font("Arial", Font.PLAIN, 16));
         restartButton.setText("Restart Game");
         restartButton.setPreferredSize(new Dimension(boardWidth, 30));
@@ -141,13 +143,13 @@ public class MatchCards {
                 card2Selected = null;
                 shuffleCards();
 
-                //re assign buttons with new cards
+                // re assign buttons with new cards
                 for (int i = 0; i < board.size(); i++) {
                     board.get(i).setIcon(cardSet.get(i).cardImageIcon);
                 }
 
                 errorCount = 0;
-                textLabel.setText("Errors: " + Integer.toString(errorCount));
+                updateStatusLabel();
                 hideCardTimer.start();
             }
         });
@@ -157,7 +159,7 @@ public class MatchCards {
         frame.pack();
         frame.setVisible(true);
 
-        //start game
+        // start game
         hideCardTimer = new Timer(1500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -166,7 +168,11 @@ public class MatchCards {
         });
         hideCardTimer.setRepeats(false);
         hideCardTimer.start();
+    }
 
+    // update the status label with player name and errors
+    void updateStatusLabel() {
+        textLabel.setText("Player: " + playerName + "  Errors: " + errorCount);
     }
 
     void setupCards() {
