@@ -3,62 +3,68 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class FrontPage {
-    JFrame frame = new JFrame("Pokemon Match Cards - Welcome");
-    JTextField nameField = new JTextField(20);
-    JButton startButton = new JButton("Start Game");
-    JButton leaderboardButton = new JButton("Leaderboard");
-    JLabel backgroundLabel;
+    JFrame frame;
+    JTextField nameField;
+    JButton startButton, exitButton;
 
-    public FrontPage() {
-        frame.setSize(700, 500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null); // Use absolute layout for background layering
+public FrontPage() {
+    int frontWidth = 5 * 90;  // 450
+    int frontHeight = 4 * 128; // 512
 
-        // Load background image
-        ImageIcon bgIcon = new ImageIcon(getClass().getResource("./img/frontpage.jpg"));
-        Image img = bgIcon.getImage().getScaledInstance(700, 500, Image.SCALE_SMOOTH);
-        backgroundLabel = new JLabel(new ImageIcon(img));
-        backgroundLabel.setBounds(0, 0, 700, 500);
+    frame = new JFrame("Welcome to Pokémon Match Cards");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setSize(frontWidth, frontHeight);
+    frame.setLayout(new BorderLayout());
+    frame.setLocationRelativeTo(null);
 
-        // Username input
-        JLabel nameLabel = new JLabel("Enter your name:");
-        nameLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        nameLabel.setBounds(240, 150, 200, 30);
-        nameField.setBounds(240, 190, 220, 30);
-        // mahadi ; 
+    JLabel titleLabel = new JLabel("Pokémon Match Cards", SwingConstants.CENTER);
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+    titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+    frame.add(titleLabel, BorderLayout.NORTH);
 
-        // Start Game button
-        startButton.setFont(new Font("Arial", Font.BOLD, 16));
-        startButton.setBounds(240, 240, 220, 40);
-        startButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String username = nameField.getText().trim();
-                if (username.isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Please enter your name.");
-                } else {
-                    frame.dispose(); // close front page
-                    new MatchCard(username); // pass name
-                }
+    // Use a BoxLayout panel to center components vertically and horizontally, compact size
+    JPanel centerPanel = new JPanel();
+    centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+    centerPanel.setBorder(BorderFactory.createEmptyBorder(50, 80, 50, 80)); // padding
+
+    nameField = new JTextField();
+    nameField.setFont(new Font("Arial", Font.PLAIN, 16));
+    nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); // compact height, full width allowed
+    nameField.setHorizontalAlignment(JTextField.CENTER);
+    nameField.setBorder(BorderFactory.createTitledBorder("Enter Player Name"));
+    centerPanel.add(nameField);
+
+    centerPanel.add(Box.createRigidArea(new Dimension(0, 20))); // vertical spacing
+
+    startButton = new JButton("Enter Game");
+    startButton.setFont(new Font("Arial", Font.PLAIN, 16));
+    startButton.setAlignmentX(Component.CENTER_ALIGNMENT); // center horizontally
+    startButton.setMaximumSize(new Dimension(200, 40)); // compact button size
+    startButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            String playerName = nameField.getText().trim();
+            if (playerName.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Please enter your name.");
+                return;
             }
-        });
+            frame.dispose();
+            App.launchGame();
+        }
+    });
+    centerPanel.add(startButton);
 
-        // Leaderboard button
-        leaderboardButton.setFont(new Font("Arial", Font.PLAIN, 16));
-        leaderboardButton.setBounds(240, 290, 220, 35);
-        leaderboardButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, "Leaderboard feature coming soon!");
-        });
+    centerPanel.add(Box.createRigidArea(new Dimension(0, 10))); // vertical spacing
 
-        // Add components in order (text, then background last for layering)
-        frame.add(nameLabel);
-        frame.add(nameField);
-        frame.add(startButton);
-        frame.add(leaderboardButton);
-        frame.add(backgroundLabel);
+    exitButton = new JButton("Exit");
+    exitButton.setFont(new Font("Arial", Font.PLAIN, 16));
+    exitButton.setAlignmentX(Component.CENTER_ALIGNMENT); // center horizontally
+    exitButton.setMaximumSize(new Dimension(200, 40)); // compact button size
+    exitButton.addActionListener(e -> System.exit(0));
+    centerPanel.add(exitButton);
 
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setVisible(true);
-    }
+    frame.add(centerPanel, BorderLayout.CENTER);
+
+    frame.setVisible(true);
 }
 
+}

@@ -1,14 +1,10 @@
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
-import javax.smartcardio.Card;
 import javax.swing.*;
 
-public class MatchCard{
-    String username ;
-    MatchCard(String username) {
-         this.username = username;
+public class MatchCards {
     class Card {
         String cardName;
         ImageIcon cardImageIcon;
@@ -61,7 +57,7 @@ public class MatchCard{
     JButton card1Selected;
     JButton card2Selected;
     
-    MatchCard() {
+    MatchCards() {
         setupCards();
         shuffleCards();
 
@@ -127,7 +123,6 @@ public class MatchCard{
         frame.add(boardPanel);
 
         //restart game button
-        
         restartButton.setFont(new Font("Arial", Font.PLAIN, 16));
         restartButton.setText("Restart Game");
         restartButton.setPreferredSize(new Dimension(boardWidth, 30));
@@ -156,7 +151,6 @@ public class MatchCard{
                 hideCardTimer.start();
             }
         });
-
         restartGamePanel.add(restartButton);
         frame.add(restartGamePanel, BorderLayout.SOUTH);
 
@@ -213,7 +207,7 @@ public class MatchCard{
             card2Selected.setIcon(cardBackImageIcon);
             card2Selected = null;
         }
-        else {
+        else { //flip all cards face down
             for (int i = 0; i < board.size(); i++) {
                 board.get(i).setIcon(cardBackImageIcon);
             }
@@ -222,6 +216,3 @@ public class MatchCard{
         }
     }
 }
-
-}
-

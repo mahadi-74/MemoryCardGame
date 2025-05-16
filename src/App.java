@@ -1,5 +1,9 @@
 public class App {
     public static void main(String[] args) {
-        new FrontPage();
+        javax.swing.SwingUtilities.invokeLater(() -> new FrontPage());
+    }
+
+    public static void launchGame() {
+        javax.swing.SwingUtilities.invokeLater(() -> new MatchCards());
     }
 }
